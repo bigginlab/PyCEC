@@ -166,6 +166,20 @@ class WaterAnalysis:
         
         plt.show()
 
+    def get_max_hbond_counts(self, counts):
+        """
+        Get the frames and times of the 10 frames with the most hydrogen bonds.
+        """
+        # Get the frames with the most hydrogen bonds
+        max_counts = sorted(counts, reverse=True)[:10]
+        max_frames = [counts.index(c) for c in max_counts]
+        max_times = [self.times[f] for f in max_frames]
+
+        print(f"\nFrames with the most hydrogen bonds: {max_frames}")
+        print(f"Times of the frames with the most hydrogen bonds: {max_times}")
+
+        return max_frames, max_times
+
 
 
 

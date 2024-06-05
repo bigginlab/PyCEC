@@ -1,5 +1,5 @@
 from collective_variable import CECCollectiveVariable
-from PyCEC.analysis import CVAnalysis
+from analysis import CVAnalysis
 
 import matplotlib.pyplot as plt
 import numpy as np

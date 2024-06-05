@@ -1,5 +1,5 @@
 from collective_variable import CECCollectiveVariable
-from cv_analysis import CVAnalysis
+from PyCEC.analysis import CVAnalysis
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -9,6 +9,7 @@ import pandas as pd
 from tqdm import tqdm
 
 import MDAnalysis as mda
+
 
 class CVPlotting:
     """
@@ -20,10 +21,13 @@ class CVPlotting:
         self.cv_analysis = cv_analysis
 
     def plot_water_counts(self, save=False):
-        """
-        Plot the water counts over time.
-        
-        """
+        """Plot the water counts over time.
+
+        Parameters
+        ----------
+        save : bool, optional
+            _description_, by default False
+        """        
         water_counts = self.cv_analysis.get_water_counts()
 
         fig, ax = plt.subplots()

@@ -1,3 +1,11 @@
+"""
+PyCEC.collective_variable is a module that contains the CECCollectiveVariable\
+class, which is used to generate and analyse a collective variable for the\
+CEC system. The class is used to select a set of residues from a\
+MDAnalysis Universe object that define a collective variable. The class\
+can also be used to write the selection to a PDB file, generate a GROMACS\
+compatible index file, and get information about the selection.
+"""
 
 # CORE
 import os
@@ -107,7 +115,8 @@ class CECCollectiveVariable:
         self.protein = self.universe.select_atoms('protein') # protein atomgroup
 
         # QM atoms
-        self.qm_all, self.qm_heavy, self.qm_light, self.waters = self.select_QM_atoms()
+        self.qm_all, self.qm_heavy, self.qm_light, self.waters,\
+              self.waters_sele_str = self.select_QM_atoms()
 
 
     def generate_cv_selection(self):
@@ -174,6 +183,7 @@ class CECCollectiveVariable:
 
         # All water atoms - atomgroup
         waters = ha_water_sele + la_water_sele
+        waters_sele_str = f'({ha_wat_sele_str}) or ({la_wat_sele_str})'
 
         # Combine the selections
         qm_heavy = ha_sele + ha_water_sele
@@ -182,7 +192,7 @@ class CECCollectiveVariable:
         
 
         # Return the selections
-        return qm_all, qm_heavy, qm_light, waters
+        return qm_all, qm_heavy, qm_light, waters, waters_sele_str
 
 
     def set_frame(self, frame_n=None):

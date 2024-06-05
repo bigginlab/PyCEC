@@ -27,5 +27,7 @@ Public API in the main PyCEC namespace
  test              --- Run PyCEC unittests
 """
 
-# For relative imports to work in Python 3.6
-import os, sys; sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+#export PYTHONPATH="${PYTHONPATH}:/biggin/b222/catz0163/pept/dynamics/pept_holo/pept_AF_H87P_D342P_v2/qmmm/analysis/PyCEC/PyCEC"
+
+# # For relative imports to work in Python 3.6
+# import os, sys; sys.path.append(os.path.dirname(os.path.realpath(__file__)))

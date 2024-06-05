@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>PyCEC package &#8212; PyCEC 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
+    <script src="_static/documentation_options.js?v=f2a433a1"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="pycec-package">
+<h1>PyCEC package<a class="headerlink" href="#pycec-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-PyCEC.collective_variable">
+<span id="pycec-collective-variable-module"></span><h2>PyCEC.collective_variable module<a class="headerlink" href="#module-PyCEC.collective_variable" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyCEC.collective_variable.CECCollectiveVariable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyCEC.collective_variable.</span></span><span class="sig-name descname"><span class="pre">CECCollectiveVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">universe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_resid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_resid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_resids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backbone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ligand</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ligand_bb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cyzone_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[8,</span> <span class="pre">8,</span> <span class="pre">-8]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warnings_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.collective_variable.CECCollectiveVariable" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to generate and analyse a collective variable.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.collective_variable.CECCollectiveVariable.create_dir">
+<span class="sig-name descname"><span class="pre">create_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.collective_variable.CECCollectiveVariable.create_dir" title="Link to this definition">¶</a></dt>
+<dd><p>Function to create a directory.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>dir_name<span class="classifier">str</span></dt><dd><p>Name of the directory to create.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.collective_variable.CECCollectiveVariable.generate_cv_selection">
+<span class="sig-name descname"><span class="pre">generate_cv_selection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.collective_variable.CECCollectiveVariable.generate_cv_selection" title="Link to this definition">¶</a></dt>
+<dd><p>Function to select a set of residues from resIDs that define a CV.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.collective_variable.CECCollectiveVariable.get_sele_info">
+<span class="sig-name descname"><span class="pre">get_sele_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.collective_variable.CECCollectiveVariable.get_sele_info" title="Link to this definition">¶</a></dt>
+<dd><p>Function to get information about the selection.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyCEC.collective_variable.CECCollectiveVariable.heavy_atom_types_t">
+<span class="sig-name descname"><span class="pre">heavy_atom_types_t</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('O*',</span> <span class="pre">'N*')</span></em><a class="headerlink" href="#PyCEC.collective_variable.CECCollectiveVariable.heavy_atom_types_t" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyCEC.collective_variable.CECCollectiveVariable.light_atom_types_t">
+<span class="sig-name descname"><span class="pre">light_atom_types_t</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('HD*',</span> <span class="pre">'HE*')</span></em><a class="headerlink" href="#PyCEC.collective_variable.CECCollectiveVariable.light_atom_types_t" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.collective_variable.CECCollectiveVariable.select_QM_atoms">
+<span class="sig-name descname"><span class="pre">select_QM_atoms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.collective_variable.CECCollectiveVariable.select_QM_atoms" title="Link to this definition">¶</a></dt>
+<dd><p>Function to select the atoms and waters to be treated with QM from the CV selection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.collective_variable.CECCollectiveVariable.set_frame">
+<span class="sig-name descname"><span class="pre">set_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.collective_variable.CECCollectiveVariable.set_frame" title="Link to this definition">¶</a></dt>
+<dd><p>Function to set the frame number.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>frame_n<span class="classifier">int, optional</span></dt><dd><p>Frame number to set the universe to (default is None)</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyCEC.collective_variable.CECCollectiveVariable.water_types_t">
+<span class="sig-name descname"><span class="pre">water_types_t</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('TIP3',</span> <span class="pre">'SOL')</span></em><a class="headerlink" href="#PyCEC.collective_variable.CECCollectiveVariable.water_types_t" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.collective_variable.CECCollectiveVariable.write_cv_and_qm">
+<span class="sig-name descname"><span class="pre">write_cv_and_qm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename_cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cv-selection'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename_qm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qm-selection'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename_pt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'protein'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'structures'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.collective_variable.CECCollectiveVariable.write_cv_and_qm" title="Link to this definition">¶</a></dt>
+<dd><p>Function to write the CV and QM selections to PDB files.</p>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.collective_variable.CECCollectiveVariable.write_cv_pdb">
+<span class="sig-name descname"><span class="pre">write_cv_pdb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cv-selection'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'structures'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.collective_variable.CECCollectiveVariable.write_cv_pdb" title="Link to this definition">¶</a></dt>
+<dd><p>Function to write the the full CV selection to a PDB file.</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.collective_variable.CECCollectiveVariable.write_index">
+<span class="sig-name descname"><span class="pre">write_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cv-selection'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'structures'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_grp_nm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CV-atoms'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom_group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.collective_variable.CECCollectiveVariable.write_index" title="Link to this definition">¶</a></dt>
+<dd><p>Function to generate a GROMACS compatible index (.ndx) file from a selction’s atomsIDs.</p>
+<section id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.collective_variable.CECCollectiveVariable.write_pdb">
+<span class="sig-name descname"><span class="pre">write_pdb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cv-selection'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'structures'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom_group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_grp_nm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CV-atoms'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.collective_variable.CECCollectiveVariable.write_pdb" title="Link to this definition">¶</a></dt>
+<dd><p>Function to write a selection to a PDB file.</p>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.collective_variable.CECCollectiveVariable.write_protein_pdb">
+<span class="sig-name descname"><span class="pre">write_protein_pdb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'protein'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'structures'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.collective_variable.CECCollectiveVariable.write_protein_pdb" title="Link to this definition">¶</a></dt>
+<dd><p>Function to write just the protein to a PDB file.</p>
+<section id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.collective_variable.CECCollectiveVariable.write_qm_pdb">
+<span class="sig-name descname"><span class="pre">write_qm_pdb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qm-selection'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'structures'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.collective_variable.CECCollectiveVariable.write_qm_pdb" title="Link to this definition">¶</a></dt>
+<dd><p>Function to write the the QM atom selection to a PDB file.</p>
+<section id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyCEC.cv_analysis">
+<span id="pycec-cv-analysis-module"></span><h2>PyCEC.cv_analysis module<a class="headerlink" href="#module-PyCEC.cv_analysis" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyCEC.cv_analysis.CVAnalysis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyCEC.cv_analysis.</span></span><span class="sig-name descname"><span class="pre">CVAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">universe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_resid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_resid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_resids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ligand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cyzone_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.cv_analysis.CVAnalysis" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to analyse the collective variable of the CEC system.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.cv_analysis.CVAnalysis.get_traj_times">
+<span class="sig-name descname"><span class="pre">get_traj_times</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.cv_analysis.CVAnalysis.get_traj_times" title="Link to this definition">¶</a></dt>
+<dd><p>Get the time of each frame in the trajectory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.cv_analysis.CVAnalysis.get_water_counts">
+<span class="sig-name descname"><span class="pre">get_water_counts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.cv_analysis.CVAnalysis.get_water_counts" title="Link to this definition">¶</a></dt>
+<dd><p>Iterate through the frames and get the water counts.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.cv_analysis.CVAnalysis.get_water_counts_h">
+<span class="sig-name descname"><span class="pre">get_water_counts_h</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.cv_analysis.CVAnalysis.get_water_counts_h" title="Link to this definition">¶</a></dt>
+<dd><p>Iterate through the frames and get the water counts in a readable format.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyCEC.plotting">
+<span id="pycec-plotting-module"></span><h2>PyCEC.plotting module<a class="headerlink" href="#module-PyCEC.plotting" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyCEC.plotting.CVPlotting">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyCEC.plotting.</span></span><span class="sig-name descname"><span class="pre">CVPlotting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cv_analysis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.plotting.CVPlotting" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to plot the collective variable of the CEC system.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.plotting.CVPlotting.plot_water_counts">
+<span class="sig-name descname"><span class="pre">plot_water_counts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.plotting.CVPlotting.plot_water_counts" title="Link to this definition">¶</a></dt>
+<dd><p>Plot the water counts over time.</p>
+<section id="id8">
+<h3>Parameters<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>save<span class="classifier">bool, optional</span></dt><dd><p>_description_, by default False</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.plotting.CVPlotting.plot_water_counts_boxplot">
+<span class="sig-name descname"><span class="pre">plot_water_counts_boxplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.plotting.CVPlotting.plot_water_counts_boxplot" title="Link to this definition">¶</a></dt>
+<dd><p>Plot the boxplot of water counts.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.plotting.CVPlotting.plot_water_counts_line">
+<span class="sig-name descname"><span class="pre">plot_water_counts_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'water_counts_line_hist'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.plotting.CVPlotting.plot_water_counts_line" title="Link to this definition">¶</a></dt>
+<dd><p>Plot the water counts over time, with a histogram of frequency to the right of the main plot.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.plotting.CVPlotting.plot_water_counts_violinplot">
+<span class="sig-name descname"><span class="pre">plot_water_counts_violinplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.plotting.CVPlotting.plot_water_counts_violinplot" title="Link to this definition">¶</a></dt>
+<dd><p>Plot the violin plot of water counts.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyCEC.residue_analysis">
+<span id="pycec-residue-analysis-module"></span><h2>PyCEC.residue_analysis module<a class="headerlink" href="#module-PyCEC.residue_analysis" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyCEC.residue_analysis.ResidueAnalysis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyCEC.residue_analysis.</span></span><span class="sig-name descname"><span class="pre">ResidueAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">universe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.residue_analysis.ResidueAnalysis" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to analyse the residues of the CEC system.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.residue_analysis.ResidueAnalysis.get_rmsd">
+<span class="sig-name descname"><span class="pre">get_rmsd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.residue_analysis.ResidueAnalysis.get_rmsd" title="Link to this definition">¶</a></dt>
+<dd><p>Get the RMSD of the selection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.residue_analysis.ResidueAnalysis.get_torsions">
+<span class="sig-name descname"><span class="pre">get_torsions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dihedral</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.residue_analysis.ResidueAnalysis.get_torsions" title="Link to this definition">¶</a></dt>
+<dd><p>Get the torsion angles of the selection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.residue_analysis.ResidueAnalysis.get_traj_times">
+<span class="sig-name descname"><span class="pre">get_traj_times</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.residue_analysis.ResidueAnalysis.get_traj_times" title="Link to this definition">¶</a></dt>
+<dd><p>Get the time of each frame in the trajectory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyCEC.residue_analysis.ResidueAnalysis.get_two_torsions">
+<span class="sig-name descname"><span class="pre">get_two_torsions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dihedral1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dihedral2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyCEC.residue_analysis.ResidueAnalysis.get_two_torsions" title="Link to this definition">¶</a></dt>
+<dd><p>Get the torsion angles of the selection.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyCEC">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-PyCEC" title="Link to this heading">¶</a></h2>
+<section id="pycec-a-package-for-python">
+<h3>PyCEC: A … package for Python<a class="headerlink" href="#pycec-a-package-for-python" title="Link to this heading">¶</a></h3>
+<p>Documentation is available in the docstrings and
+online at &lt;link&gt;</p>
+<section id="subpackages">
+<h4>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">¶</a></h4>
+<p>Using any of these subpackages requires an explicit import. For example,
+<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">scipy.cluster</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span>                      <span class="o">---</span> <span class="n">Vector</span> <span class="n">Quantization</span> <span class="o">/</span> <span class="n">Kmeans</span>
+<span class="n">constants</span>                    <span class="o">---</span> <span class="n">Physical</span> <span class="ow">and</span> <span class="n">mathematical</span> <span class="n">constants</span> <span class="ow">and</span> <span class="n">units</span>
+<span class="n">datasets</span>                     <span class="o">---</span> <span class="n">Dataset</span> <span class="n">methods</span>
+</pre></div>
+</div>
+</section>
+<section id="public-api-in-the-main-pycec-namespace">
+<h4>Public API in the main PyCEC namespace<a class="headerlink" href="#public-api-in-the-main-pycec-namespace" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">__version__</span>       <span class="o">---</span> <span class="n">PyCEC</span> <span class="n">version</span> <span class="n">string</span>
+<span class="n">LowLevelCallable</span>  <span class="o">---</span> <span class="n">Low</span><span class="o">-</span><span class="n">level</span> <span class="n">callback</span> <span class="n">function</span>
+<span class="n">show_config</span>       <span class="o">---</span> <span class="n">Show</span> <span class="n">PyCEC</span> <span class="n">build</span> <span class="n">configuration</span>
+<span class="n">test</span>              <span class="o">---</span> <span class="n">Run</span> <span class="n">PyCEC</span> <span class="n">unittests</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">PyCEC</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Ronald Cvek.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="_sources/PyCEC.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

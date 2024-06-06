@@ -46,6 +46,8 @@ with warnings.catch_warnings():
 plt.rcParams["font.family"] = "serif"
 plt.rcParams["mathtext.fontset"] = "dejavuserif"
 
+# LOCAL
+import utils
 
 ### CLASS: CECCollectiveVariable
 class CECCollectiveVariable:
@@ -152,7 +154,6 @@ class CECCollectiveVariable:
         # Return the selection string
         return sel_str, cv_resids_sele, lig_str
 
-
     def select_QM_atoms(self):
         """
         Function to select the atoms and waters to be treated with QM from the CV selection.
@@ -213,7 +214,7 @@ class CECCollectiveVariable:
             # Update the qm selections (dynamic waters) every time the frame is changed
             self.qm_all, self.qm_heavy, self.qm_light, self.waters = self.select_QM_atoms()
 
-
+    
     def create_dir(self, dir_name):
         """
         Function to create a directory.
@@ -229,7 +230,7 @@ class CECCollectiveVariable:
         except FileExistsError:
             pass
 
-
+    @utils.timeit
     def write_pdb(self, filename='cv-selection', dir_name='structures',
                   atom_group=None, frame_n=None, idx=True, idx_grp_nm='CV-atoms'):
         """
@@ -243,7 +244,7 @@ class CECCollectiveVariable:
         self.set_frame(frame_n=frame_n)
 
         # Create the directory
-        self.create_dir(dir_name)
+        utils.create_dir(dir_name) # TODO: follow up this utils section
 
         # Write the selection to a PDB file
         with mda.Writer(f"./{dir_name}/{filename}-f{self.frame_n}.pdb", atom_group) as writer:
@@ -380,14 +381,14 @@ if __name__ == "__main__":
 
     # Provisional - Due to excessive warnings from MDAnalysis
     warnings.filterwarnings('ignore')
-    frame_test = 166
+    frame_test = 91
 
     # Directory and title
-    dir1 = '/biggin/b222/catz0163/pept/dynamics/pept_holo/pept_AF_H87P_D342P_v2/qmmm'
+    dir1 = '/biggin/b222/catz0163/pept/dynamics/pept_holo/pept_AF_H87P_D342P_v2'
     title1 = 'PepT2 with AF H87P D342P'
 
     # Load the universe
-    u1 = mda.Universe(f'{dir1}/prod-s100.pdb', f'{dir1}/prod-s100.xtc')
+    u1 = mda.Universe(f'{dir1}/prod-s200.pdb', f'{dir1}/prod-s200.xtc')
 
     print("\n")
     # Initialise class

@@ -99,8 +99,7 @@ if __name__ == "__main__":
     title1 = 'PepT2 with AF H87P D342P'
 
     # Load the universe
-    u1 = mda.Universe(f'{dir1}/prod-s100.pdb', f'{dir1}/prod-s100.xtc')
-
+    u1 = mda.Universe(f'{dir1}/prod-s200.pdb', f'{dir1}/prod-s200.xtc')
 
     # Residue analysis
     d342 = ResidueAnalysis(u1, 342)

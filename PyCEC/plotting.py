@@ -122,7 +122,7 @@ if __name__ == "__main__":
     title1 = 'PepT2 with AF H87P D342P'
 
     # Load the universe
-    u1 = mda.Universe(f'{dir1}/prod-s100.pdb', f'{dir1}/prod-s100.xtc')
+    u1 = mda.Universe(f'{dir1}/prod-s200.pdb', f'{dir1}/prod-s200.xtc')
 
     # Initialise class
     cv_analysis = CVAnalysis(u1, initial_resid=342, target_resid=56,

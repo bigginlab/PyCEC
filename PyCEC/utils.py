@@ -35,7 +35,7 @@ def timeit(func):
         start = time.time()
         result = func(*args, **kwargs)
         end = time.time()
-        print(f"func. {func.__name__} ({dict_to_str(kwargs)}) took {end - start:.2f} s to run.")
+        print(f"function {func.__name__} ({dict_to_str(kwargs)}) took {end - start:.2f}s to run.")
         return result
     return wrapper
 

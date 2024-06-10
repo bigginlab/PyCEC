@@ -1,5 +1,5 @@
 # PyCEC
-from collective_variable import CECCollectiveVariable
+from PyCEC.cec_system import CECSystem
 
 # MDAnalysis
 import MDAnalysis as mda # TODO: This needs to be fixed tbh, not efficient

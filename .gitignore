@@ -2,6 +2,7 @@
 
 # General
 *.pyc
+*.pyo
 *~
 .DS_Store
 .idea
@@ -9,9 +10,28 @@
 .sass-cache
 __pycache__
 
+# Distribution / packaging
+*.egg-info/
+bin/
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Sphinx documentation
+docs/_build/
+
 # Data output directories
 */structures/
 */*_test/
-/structures/
-/structures*/
-/PyCEC/notebooks/*.png
+structures/
+structures*/
+*/notebooks/*.png

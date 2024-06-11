@@ -47,7 +47,7 @@ plt.rcParams["font.family"] = "serif"
 plt.rcParams["mathtext.fontset"] = "dejavuserif"
 
 # LOCAL
-import utils
+from PyCEC import utils
 
 ### CLASS: CECCollectiveVariable
 class CECSystem:

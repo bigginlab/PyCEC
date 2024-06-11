@@ -33,9 +33,9 @@ class CVAnalysis:
         self.timestep = self.u.trajectory.dt
 
         self.times = self.get_traj_times()
-        self.cv = CECCollectiveVariable(self.u, self.initial_resid, self.target_resid,
-                                        self.other_resids, self.ligand, self.cyzone_dim,
-                                        self.frame_n)
+        self.cv = CECSystem(self.u, self.initial_resid, self.target_resid,
+                            self.other_resids, self.ligand, self.cyzone_dim,
+                            self.frame_n)
 
     def get_traj_times(self):
         """
@@ -102,9 +102,9 @@ class WaterAnalysis:
 
         self.times = self.get_traj_times()
 
-        self.cv = CECCollectiveVariable(self.u, self.initial_resid, self.target_resid,
-                                        self.other_resids, self.ligand, self.cyzone_dim,
-                                        self.frame_n)
+        self.cv = CECSystem(self.u, self.initial_resid, self.target_resid,
+                            self.other_resids, self.ligand, self.cyzone_dim,
+                            self.frame_n)
 
         self.waters = self.cv.waters
         self.waters_sele_str = self.cv.waters_sele_str

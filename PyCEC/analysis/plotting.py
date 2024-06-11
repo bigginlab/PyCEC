@@ -1,5 +1,5 @@
 from PyCEC.cec_system import CECSystem
-from analysis import CVAnalysis
+from PyCEC.analysis.analysis import CVAnalysis
 
 import matplotlib.pyplot as plt
 import numpy as np

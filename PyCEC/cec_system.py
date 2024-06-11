@@ -6,50 +6,27 @@ MDAnalysis Universe object that define a collective variable. The class\
 can also be used to write the selection to a PDB file, generate a GROMACS\
 compatible index file, and get information about the selection.
 """
+# LOCAL
+from PyCEC import utils
 
 # CORE
 import os
-import glob
-import sys
-import shutil
-import subprocess
-import re
-import statistics
-
-# SCIENTIFIC
-import numpy as np
-import pandas as pd
-from scipy import ndimage
-from scipy import stats
-from scipy.stats import median_abs_deviation
 
 # PLOTTING
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import cm
-import matplotlib.colors as mcolors
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-import matplotlib.ticker as tick
 
 # MDANALYISIS
-import warnings # MDAnalysis warnings are annoying
+import warnings  # MDAnalysis warnings are annoying
 with warnings.catch_warnings():
-    warnings.filterwarnings("ignore")#,category=DeprecationWarning)
+    warnings.filterwarnings("ignore")
 
     import MDAnalysis as mda
-    from MDAnalysis.analysis import contacts
-    from MDAnalysis.analysis.hydrogenbonds.hbond_analysis import HydrogenBondAnalysis as HBA
-    from MDAnalysis.analysis import rms, align
-    from MDAnalysis.analysis.bat import BAT
-    from mpl_toolkits.mplot3d import Axes3D  # Use '%matplotlib widget' magic to interact with plots
-    from MDAnalysis.topology.guessers import guess_bonds
 
 plt.rcParams["font.family"] = "serif"
 plt.rcParams["mathtext.fontset"] = "dejavuserif"
 
-# LOCAL
-from PyCEC import utils
 
-### CLASS: CECCollectiveVariable
+# CLASS: CECCollectiveVariable
 class CECSystem:
     """
     Class to generate and analyse a collective variable.
@@ -60,11 +37,13 @@ class CECSystem:
     heavy_atom_types_t = ('O*', 'N*')
     light_atom_types_t = ('HD*', 'HE*')
 
-    def __init__(self, universe, initial_resid, target_resid, other_resids=None, backbone=False,
-                 ligand=None, ligand_bb=False, cyzone_dim=[8, 8, -8], frame_n=0, warnings_on=True):
+    def __init__(self, universe, initial_resid, target_resid,
+                 other_resids=None, backbone=False, ligand=None,
+                 ligand_bb=False, cyzone_dim=[8, 8, -8], frame_n=0,
+                 warnings_on=True):
         """
         Initialise the class.
-        
+
         Parameters
         ----------
         universe : MDAnalysis Universe
@@ -76,11 +55,11 @@ class CECSystem:
         other_resids : list of int, optional
             List of residue ids to include in selection. (default is None)
         backbone : bool, optional
-            Whether to include backbone atoms in the selection. (default is False)
+            Include backbone atoms in the selection. (default is False)
         ligand : list of str, optional
-            List of ligand residue ids to include in the selection. (default is None)
+            List of ligand resids to include in selection. (default is None)
         ligand_bb : bool, optional
-            Whether to include backbone atoms of the ligand in the selection. (default is False)
+            Include backbone atoms of ligand in selection. (default is False)
         cyzone_dim : list of int, optional
             Dimensions of the cyzone around the protein (default is [8, 8, -8])
         frame_n : int, optional
@@ -106,20 +85,19 @@ class CECSystem:
         # Warnings
         if warnings_on is False:
             warnings.filterwarnings('ignore')
-            #warnings.filterwarnings("ignore", category=UserWarning)
+            # warnings.filterwarnings("ignore", category=UserWarning)
 
         # Self-attributes
         # CV Selection
         self.cv_selection_str_all, resids_sele, lig_str = self.generate_cv_selection()
-        self.cv_atom_group = self.universe.select_atoms(self.cv_selection_str_all) # all resids
-        self.resids_atom_group = self.universe.select_atoms(resids_sele) # initial, target and other resids
-        self.ligand_atom_group = self.universe.select_atoms(lig_str) # just ligands
-        self.protein = self.universe.select_atoms('protein') # protein atomgroup
+        self.cv_atom_group = self.universe.select_atoms(self.cv_selection_str_all)  # all resids
+        self.resids_atom_group = self.universe.select_atoms(resids_sele)  # initial, target and other resids
+        self.ligand_atom_group = self.universe.select_atoms(lig_str)  # ligands
+        self.protein = self.universe.select_atoms('protein')  # protein
 
         # QM atoms
-        self.qm_all, self.qm_heavy, self.qm_light, self.waters,\
-              self.waters_sele_str = self.select_QM_atoms()
-
+        self.qm_all, self.qm_heavy, self.qm_light, self.waters, \
+            self.waters_sele_str = self.select_QM_atoms()
 
     def generate_cv_selection(self):
         """
@@ -133,9 +111,9 @@ class CECSystem:
                 cv_resids_sele += f' {resid}'
             cv_resids_sele += f') and not ({self.water_types})'
         if self.backbone is False:
-            #cv_resids_sele += ' and not backbone and not name H and not name HA' # exclude backbone atoms and pesky protons
-            cv_resids_sele += ' and not backbone and not name H*' # exclude backbone atoms and ALL protons
-        #print(f"cv_resids_sele: {cv_resids_sele}")
+            # Exclude backbone atoms and ALL protons
+            cv_resids_sele += ' and not backbone and not name H*'
+        # print(f"cv_resids_sele: {cv_resids_sele}")
 
         # Ligands
         if self.ligand is not None:
@@ -144,43 +122,57 @@ class CECSystem:
                 lig_str += f' {lig}'
             lig_str += f') and not ({self.water_types})'
             if self.ligand_bb is False:
-                lig_str += '  and not name H*' # remove backbone and protons
-            #print(f"ligand_sele: {lig_str}")
+                lig_str += '  and not name H*'  # remove backbone and protons
+            # print(f"ligand_sele: {lig_str}")
             # Combine selections
             sel_str = f'({cv_resids_sele}) or ({lig_str})'
 
-        #print(f"\nSelection string: {sel_str}\n")
+        # print(f"\nSelection string: {sel_str}\n")
 
         # Return the selection string
         return sel_str, cv_resids_sele, lig_str
 
     def select_QM_atoms(self):
         """
-        Function to select the atoms and waters to be treated with QM from the CV selection.
+        Select the atoms and waters to be treated with QM from CV selection.
         """
         # CV residues - initial and target
         cv_resids_sele = f"resid {self.initial} {self.target}"
 
         # Heavy atoms selection
         ha_types_sele = ' or '.join([f'name {ha}' for ha in self.heavy_atom_types_t])
-        ha_sele_str = f'({cv_resids_sele}) and ({ha_types_sele}) and protein and not backbone and not name H*' # exclude backbone and protons
-        ha_sele = self.universe.select_atoms(ha_sele_str) # ha atomgroup
+        ha_sele_str = (
+            f'({cv_resids_sele}) and ({ha_types_sele}) and protein'
+            f'and not backbone and not name H*'
+            )  # exclude backbone and protons
+        ha_sele = self.universe.select_atoms(ha_sele_str)  # ha atomgroup
 
         # Light atoms selection
         la_types_sele = ' or '.join([f'name {la}' for la in self.light_atom_types_t])
-        la_sele_str = f'({cv_resids_sele}) and ({la_types_sele}) and protein and not backbone' # exclude backbone
-        la_sele = self.universe.select_atoms(la_sele_str) # la atomgroup
+        la_sele_str = (
+            f'({cv_resids_sele}) and ({la_types_sele}) '
+            f'and protein and not backbone'
+            )  # exclude backbone
+        la_sele = self.universe.select_atoms(la_sele_str)  # la atomgroup
 
         # WATERS SELECTION
         # Heavy water atoms
-        ha_wat_sele_str = f'name O* and ({self.water_types}) and cyzone {' '.join([f"{dim}" for dim in self.cyzone_dim])} (({cv_resids_sele}) and protein)'
-        #print(f"ha_wat_sele_str: {ha_wat_sele_str}")
-        ha_water_sele = self.universe.select_atoms(ha_wat_sele_str) # ha water atomgroup
+        ha_wat_sele_str = (
+            f'name O* and ({self.water_types}) and cyzone '
+            f'{' '.join([f"{dim}" for dim in self.cyzone_dim])}'
+            f' (({cv_resids_sele}) and protein)'
+            )
+        # print(f"ha_wat_sele_str: {ha_wat_sele_str}")
+        ha_water_sele = self.universe.select_atoms(ha_wat_sele_str)  # ha water
 
         # Light water atoms
-        la_wat_sele_str = f'(byres (name O* and ({self.water_types}) and cyzone {' '.join([f"{dim}" for dim in self.cyzone_dim])} (({cv_resids_sele}) and protein))) and name H*'
-        #print(f"la_wat_sele_str: {la_wat_sele_str}")
-        la_water_sele = self.universe.select_atoms(la_wat_sele_str) # la water atomgroup
+        la_wat_sele_str = (
+            f'(byres (name O* and ({self.water_types}) and cyzone '
+            f'{' '.join([f"{dim}" for dim in self.cyzone_dim])} '
+            f'(({cv_resids_sele}) and protein))) and name H*'
+            )
+        # print(f"la_wat_sele_str: {la_wat_sele_str}")
+        la_water_sele = self.universe.select_atoms(la_wat_sele_str)  # la water
 
         # All water atoms - atomgroup
         waters = ha_water_sele + la_water_sele
@@ -190,11 +182,9 @@ class CECSystem:
         qm_heavy = ha_sele + ha_water_sele
         qm_light = la_sele + la_water_sele
         qm_all = ha_sele + ha_water_sele + la_sele + la_water_sele
-        
 
         # Return the selections
         return qm_all, qm_heavy, qm_light, waters, waters_sele_str
-
 
     def set_frame(self, frame_n=None):
         """
@@ -205,16 +195,16 @@ class CECSystem:
         frame_n : int, optional
             Frame number to set the universe to (default is None)
         """
-        # Set the frame
-        if frame_n is None or frame_n == self.frame_n: # set frame to  class frame if not provided or not the same
+        # set frame to class frame if not provided or not the same
+        if frame_n is None or frame_n == self.frame_n:
             frame_n = self.frame_n
-        elif frame_n != self.frame_n:  # set the frame to the provided frame number if different
-            self.universe.trajectory[frame_n] # set the frame
-            self.frame_n = frame_n # update the frame instance attribute
-            # Update the qm selections (dynamic waters) every time the frame is changed
+        # set the frame to the provided frame number if different
+        elif frame_n != self.frame_n:
+            self.universe.trajectory[frame_n]  # set the frame
+            self.frame_n = frame_n  # update the frame instance attribute
+            # Update qm selections  waters) every time the frame is updated
             self.qm_all, self.qm_heavy, self.qm_light, self.waters = self.select_QM_atoms()
 
-    
     def create_dir(self, dir_name):
         """
         Function to create a directory.
@@ -232,7 +222,8 @@ class CECSystem:
 
     @utils.timeit
     def write_pdb(self, filename='cv-selection', dir_name='structures',
-                  atom_group=None, frame_n=None, idx=True, idx_grp_nm='CV-atoms'):
+                  atom_group=None, frame_n=None, idx=True,
+                  idx_grp_nm='CV-atoms'):
         """
         Function to write a selection to a PDB file.
 
@@ -252,15 +243,17 @@ class CECSystem:
 
         # Write an index file for the selection
         if idx:
-            self.write_index(filename=filename, dir_name=dir_name, idx_grp_nm=idx_grp_nm, 
-                             atom_group=atom_group, frame_n=self.frame_n)
-
+            self.write_index(filename=filename, dir_name=dir_name,
+                             idx_grp_nm=idx_grp_nm, atom_group=atom_group,
+                             frame_n=self.frame_n)
 
     # Just make this generalisable to any selection
-    def write_index(self, filename='cv-selection', dir_name='structures', idx_grp_nm='CV-atoms',
-                    atom_group=None, frame_n=None, verbose=False):
+    def write_index(self, filename='cv-selection', dir_name='structures',
+                    idx_grp_nm='CV-atoms', atom_group=None, frame_n=None,
+                    verbose=False):
         """
-        Function to generate a GROMACS compatible index (.ndx) file from a selction's atomsIDs.
+        Function to generate a GROMACS compatible index (.ndx) file from a \
+            selection's atomsIDs.
 
         Parameters
         ----------
@@ -273,8 +266,8 @@ class CECSystem:
         self.create_dir(dir_name)
 
         # Get the atom IDs
-        atom_ids = [f"{atom.id:4d}" for atom in atom_group] # assume min 4 digits per element
-        rows = [atom_ids[i:i + 15] for i in range(0, len(atom_ids), 15)] # 15 elements per row
+        atom_ids = [f"{atom.id:4d}" for atom in atom_group]  # assume min 4 digits per element
+        rows = [atom_ids[i:i + 15] for i in range(0, len(atom_ids), 15)]  # 15 elements per row
 
         # Prepare index group (append everything together)
         index_grp = f"[ {idx_grp_nm} ]\n\n" + "\n".join(" ".join(row) for row in rows) + "\n"
@@ -287,8 +280,8 @@ class CECSystem:
         if verbose:
             print(index_grp)
 
-
-    def write_cv_pdb(self, filename='cv-selection', dir_name='structures', frame_n=None):
+    def write_cv_pdb(self, filename='cv-selection', dir_name='structures',
+                     frame_n=None):
         """
         Function to write the the full CV selection to a PDB file.
 
@@ -296,11 +289,12 @@ class CECSystem:
         ----------
 
         """
-        self.write_pdb(filename=filename, dir_name=dir_name, atom_group=self.cv_atom_group,
-                       frame_n=frame_n, idx=True, idx_grp_nm='CV-atoms')
+        self.write_pdb(filename=filename, dir_name=dir_name,
+                       atom_group=self.cv_atom_group, frame_n=frame_n,
+                       idx=True, idx_grp_nm='CV-atoms')
 
-
-    def write_qm_pdb(self, filename='qm-selection', dir_name='structures', frame_n=None):
+    def write_qm_pdb(self, filename='qm-selection', dir_name='structures',
+                     frame_n=None):
         """
         Function to write the the QM atom selection to a PDB file.
 
@@ -308,11 +302,12 @@ class CECSystem:
         ----------
 
         """
-        self.write_pdb(filename=filename, dir_name=dir_name, atom_group=self.qm_all,
-                       frame_n=frame_n, idx=True, idx_grp_nm='QM-atoms')
+        self.write_pdb(filename=filename, dir_name=dir_name,
+                       atom_group=self.qm_all, frame_n=frame_n, idx=True,
+                       idx_grp_nm='QM-atoms')
 
-
-    def write_protein_pdb(self, filename='protein', dir_name='structures', frame_n=None):
+    def write_protein_pdb(self, filename='protein', dir_name='structures',
+                          frame_n=None):
         """
         Function to write just the protein to a PDB file.
 
@@ -320,12 +315,13 @@ class CECSystem:
         ----------
 
         """
-        self.write_pdb(filename=filename, dir_name=dir_name, atom_group=self.protein,
-                       frame_n=frame_n, idx=True, idx_grp_nm='Protein')
+        self.write_pdb(filename=filename, dir_name=dir_name,
+                       atom_group=self.protein, frame_n=frame_n, idx=True,
+                       idx_grp_nm='Protein')
 
-
-    def write_cv_and_qm(self, filename_cv='cv-selection', filename_qm='qm-selection',
-                        filename_pt='protein', dir_name='structures', frame_n=None):
+    def write_cv_and_qm(self, filename_cv='cv-selection',
+                        filename_qm='qm-selection', filename_pt='protein',
+                        dir_name='structures', frame_n=None):
         """
         Function to write the CV and QM selections to PDB files.
 
@@ -336,7 +332,6 @@ class CECSystem:
         self.write_cv_pdb(filename=filename_cv, dir_name=dir_name, frame_n=frame_n)
         self.write_qm_pdb(filename=filename_qm, dir_name=dir_name, frame_n=frame_n)
         self.write_protein_pdb(filename=filename_pt, dir_name=dir_name, frame_n=frame_n)
-
 
     def get_sele_info(self, verbose=False):
         """
@@ -370,11 +365,8 @@ class CECSystem:
             print(f"Atom ids: {', '.join(map(str, set(self.waters.indices)))}")
         print("\n")
 
-####################################################################################################
+###############################################################################
 
-
-
-####################################################################################################
 
 # Testing the class
 if __name__ == "__main__":
@@ -392,11 +384,27 @@ if __name__ == "__main__":
 
     print("\n")
     # Initialise class
-    cv = CECSystem(u1, initial_resid=342, target_resid=56,
-                               other_resids=[53, 57, 61, 622, 324, 345, 161, 60, 87],
-                               ligand=[1, 2], cyzone_dim=[9, 8, -8],
-                               frame_n=frame_test)
-    
-    #cv.cv_selection_string
+    cv = CECSystem(u1,
+                   initial_resid=342,
+                   target_resid=56,
+                   other_resids=[53, 57, 61, 622, 324, 345, 161, 60, 87],
+                   ligand=[1, 2],
+                   cyzone_dim=[9, 8, -8],
+                   frame_n=frame_test)
+
+    # cv.cv_selection_string
     cv.get_sele_info()
-    cv.write_cv_and_qm(frame_n=frame_test, dir_name='structures')
+    cv.write_cv_and_qm(frame_n=frame_test, dir_name='../structures_342_56')
+
+    # Initialise class
+    cv2 = CECSystem(u1,
+                    initial_resid=87,
+                    target_resid=56,
+                    other_resids=[53, 57, 61, 622, 324, 345, 161, 60, 342],
+                    ligand=[1, 2],
+                    cyzone_dim=[9, 8, -8],
+                    frame_n=frame_test)
+
+    # cv.cv_selection_string
+    cv2.get_sele_info()
+    cv2.write_cv_and_qm(frame_n=frame_test, dir_name='../structures_87_56')

@@ -2,11 +2,10 @@
 from PyCEC.cec_system import CECSystem
 
 # MDAnalysis
-import MDAnalysis as mda # TODO: This needs to be fixed tbh, not efficient
+import MDAnalysis as mda  # TODO: This needs to be fixed tbh, not efficient
 from MDAnalysis.analysis.hydrogenbonds.hbond_analysis import HydrogenBondAnalysis as HBA
 
 from tqdm import tqdm
-import time
 
 from matplotlib import pyplot as plt
 import numpy as np
@@ -16,9 +15,9 @@ class CVAnalysis:
     """
     Class to analyse the collective variable of the CEC system.
     """
-
-    def __init__(self, universe, initial_resid, target_resid, other_resids=None,
-                 ligand=None, cyzone_dim=[8, 8, -8], frame_n=0):
+    def __init__(self, universe, initial_resid, target_resid,
+                 other_resids=None, ligand=None, cyzone_dim=[8, 8, -8],
+                 frame_n=0):
         # Attributes
         self.u = universe
         self.initial_resid = initial_resid
@@ -40,7 +39,7 @@ class CVAnalysis:
     def get_traj_times(self):
         """
         Get the time of each frame in the trajectory.
-        
+
         """
         times = []
         for ts in self.u.trajectory:
@@ -48,23 +47,21 @@ class CVAnalysis:
 
         return times
 
-
     def get_water_counts(self):
         """
         Iterate through the frames and get the water counts.
-        
+
         """
         water_counts = []
-        for ts in tqdm(self.u.trajectory, desc="Getting water counts..."): # tqdm progress bar
+        for ts in tqdm(self.u.trajectory, desc="Getting water counts..."):
             self.cv.set_frame(ts.frame)
             water_counts.append(len(self.cv.waters.atoms))
 
         return water_counts
 
-
     def get_water_counts_h(self):
         """
-        Iterate through the frames and get the water counts in a readable format.
+        Iterate through the frames and get water counts in a readable format.
 
         """
         water_counts = self.get_water_counts()
@@ -78,7 +75,7 @@ class CVAnalysis:
         for i, t, w in water_c:
             print(f"Frame {i} at time {t} ps has {w} water molecules.")
 
-        #return water_c
+        # return water_c
 
 
 class WaterAnalysis:
@@ -94,7 +91,7 @@ class WaterAnalysis:
         self.other_resids = other_resids
         self.ligand = ligand
         self.cyzone_dim = cyzone_dim
-        self.frame_n = frame_n # TODO: is frame relevant here?
+        self.frame_n = frame_n  # TODO: is frame relevant here?
 
         # Trajectory information
         self.n_frames = len(self.u.trajectory)
@@ -109,11 +106,10 @@ class WaterAnalysis:
         self.waters = self.cv.waters
         self.waters_sele_str = self.cv.waters_sele_str
 
-
     def get_traj_times(self):
         """
         Get the time of each frame in the trajectory.
-        
+
         """
         times = []
         for ts in self.u.trajectory:
@@ -121,27 +117,26 @@ class WaterAnalysis:
 
         return times
 
-    def get_hydrogen_bonds(self, donors_sel=None, hydrogens_sel=None, acceptors_sel=None,
-                            distance_cutoff=3.5, angle_cutoff=120.0):
+    def get_hydrogen_bonds(self, donors_sel=None, hydrogens_sel=None,
+                           acceptors_sel=None, distance_cutoff=3.5,
+                           angle_cutoff=120.0):
         """
         Get the hydrogen bonds between the a pair of molecules.
-        
+
         """
         # Create the HBA object
         hba = HBA(universe=self.u, donors_sel=donors_sel,
                   hydrogens_sel=hydrogens_sel, acceptors_sel=acceptors_sel,
                   d_h_cutoff=distance_cutoff, d_h_a_angle_cutoff=angle_cutoff)
-        hba.run() # run the analysis
+        hba.run()  # run the analysis
 
         # Get counts
         counts = hba.count_by_time()
-        
-        return counts
-    
+
     def get_water_h_bonds(self, distance_cutoff=3.5, angle_cutoff=120.0):
         """
         Get the hydrogen bonds between the water molecules.
-        
+
         """
         # Get the hydrogen bonds
         counts = self.get_hydrogen_bonds(donors_sel=self.waters_sele_str,
@@ -150,30 +145,29 @@ class WaterAnalysis:
                                          distance_cutoff=distance_cutoff,
                                          angle_cutoff=angle_cutoff)
         return counts
-    
+
     def plot_hbond_counts(self, counts, save=False):
         """
         Plot the hydrogen bond counts.
-        
+
         """
         fig, ax = plt.subplots()
         ax.plot(self.times, counts)
         ax.set_ylabel("Number of hydrogen bonds")
         ax.set_xlabel("Frame number")
         ax.set_title("Hydrogen bond counts over time")
-        
+
         if save:
             fig.savefig("hbond_counts.png", dpi=300)
-        
-        plt.show()
 
+        plt.show()
 
     def get_max_hbond_counts(self, counts):
         """
         Get the frames and times of the 10 frames with the most hydrogen bonds.
         """
         # Get the frames with the most hydrogen bonds
-        max_counts = sorted(counts, reverse=True)[:10] # get the 10 highest counts
+        max_counts = sorted(counts, reverse=True)[:10]  # get 10 highest counts
         print(f"\nMax counts: {max_counts}")
         max_frames = []
         for c in max_counts:
@@ -184,7 +178,7 @@ class WaterAnalysis:
         print(f"Times of the frames with the most hydrogen bonds: {max_times}")
 
         return max_frames, max_times
-    
+
     def find_consistent_waters(self):
         """
         Find waters consistently included in the waters list.
@@ -196,8 +190,6 @@ class WaterAnalysis:
         Get the residence time of the water molecules.
         """
         pass
-
-
 
 
 if __name__ == "__main__":

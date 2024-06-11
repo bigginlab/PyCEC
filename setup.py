@@ -1,12 +1,14 @@
 from setuptools import setup, find_packages
 from pathlib import Path
 
+
 # Versioning
 def _get_version() -> str:
     """Read PyCEC/VERSION.txt and return its contents."""
     path = Path("PyCEC").resolve()
     version_file = path / "VERSION.txt"
     return version_file.read_text().strip()
+
 
 version = _get_version()
 
@@ -25,7 +27,10 @@ setup(
     version=version,
     author='Ronald Cvek',
     author_email='ronaldcvek@gmail.com',
-    description='Python implementation of the Center of Excess Charge (CEC) collective variable.',
+    description=(
+        'Python implementation of the Center of '
+        'Excess Charge (CEC) collective variable.'
+        ),
     url='https://github.com/roncv/PyCEC',
     packages=find_packages(),
     install_requires=requirements,

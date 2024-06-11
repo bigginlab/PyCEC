@@ -1,12 +1,7 @@
-from PyCEC.cec_system import CECSystem
 from PyCEC.analysis.analysis import CVAnalysis
 
 import matplotlib.pyplot as plt
 import numpy as np
-import os
-import pandas as pd
-
-from tqdm import tqdm
 
 import MDAnalysis as mda
 
@@ -41,12 +36,14 @@ class CVPlotting:
 
         plt.show()
 
-    def plot_water_counts_line(self, save=False, filename='water_counts_line_hist', test=False, show=False):
+    def plot_water_counts_line(self, save=False,
+                               filename='water_counts_line_hist',
+                               test=False, show=False):
         """
-        Plot the water counts over time, with a histogram of frequency to the right of the main plot.
-        
-        """
+        Plot the water counts over time, with a histogram of frequency to the\
+              right of the main plot.
 
+        """
         if test:
             # Generate some random data
             water_counts = np.random.randint(0, 100, self.cv_analysis.n_frames)
@@ -55,7 +52,10 @@ class CVPlotting:
             water_counts = self.cv_analysis.get_water_counts()
 
         # Create a figure and a grid of subplots
-        fig, axs = plt.subplots(1, 2, gridspec_kw={'width_ratios': [4, 1], 'wspace': 0.02}, figsize=(10, 5))
+        fig, axs = plt.subplots(1, 2,
+                                gridspec_kw={'width_ratios': [4, 1],
+                                             'wspace': 0.02},
+                                figsize=(10, 5))
 
         # Line plot on the left
         axs[0].plot(self.cv_analysis.times, water_counts, c='b', dash_capstyle='round')
@@ -65,8 +65,9 @@ class CVPlotting:
         axs[0].ticklabel_format(style='plain')
 
         # Histogram on the right
-        axs[1].hist(water_counts, bins=self.cv_analysis.n_frames//10, orientation='horizontal', 
-                    color='b', edgecolor='white', lw=0.4)
+        axs[1].hist(water_counts, bins=self.cv_analysis.n_frames//10,
+                    orientation='horizontal', color='b', edgecolor='white',
+                    lw=0.4)
         axs[1].axis('off')
 
         # Adjust layout to prevent overlap
@@ -80,11 +81,10 @@ class CVPlotting:
         if show:
             plt.show()
 
-
     def plot_water_counts_boxplot(self, save=False):
         """
         Plot the boxplot of water counts.
-        
+
         """
         water_counts = self.cv_analysis.get_water_counts()
 
@@ -101,7 +101,7 @@ class CVPlotting:
     def plot_water_counts_violinplot(self, save=False):
         """
         Plot the violin plot of water counts.
-        
+
         """
         water_counts = self.cv_analysis.get_water_counts()
 
@@ -126,9 +126,8 @@ if __name__ == "__main__":
 
     # Initialise class
     cv_analysis = CVAnalysis(u1, initial_resid=342, target_resid=56,
-                    other_resids=[53, 57, 61, 622],
-                    ligand=[1, 2], cyzone_dim=[8, 8, -8],
-                    frame_n=160)
+                             other_resids=[53, 57, 61, 622], ligand=[1, 2],
+                             cyzone_dim=[8, 8, -8], frame_n=160)
 
     # Create the CVPlotting object
     cv_plotting = CVPlotting(cv_analysis)

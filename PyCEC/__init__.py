@@ -1,5 +1,5 @@
 """
-PyCEC: A Python implementation of the Center of Excess Charge (CEC) collective variable.
+PyCEC: A Python implementation of the Center of Excess Charge (CEC) CV.
 ================================================
 
 Documentation is available in the docstrings and
@@ -27,12 +27,11 @@ Public API in the main PyCEC namespace
  test              --- Run PyCEC unittests
 """
 
-#export PYTHONPATH="${PYTHONPATH}:/biggin/b222/catz0163/pept/dynamics/pept_holo/pept_AF_H87P_D342P_v2/qmmm/analysis/PyCEC/PyCEC"
-
 # # For relative imports to work in Python 3.6
 # import os, sys; sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from pathlib import Path
+
 
 def _get_version() -> str:
     """Read VERSION.txt and return its contents."""

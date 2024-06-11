@@ -1,5 +1,5 @@
 """
-PyCEC: A ... package for Python
+PyCEC: A Python implementation of the Center of Excess Charge (CEC) collective variable.
 ================================================
 
 Documentation is available in the docstrings and

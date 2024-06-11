@@ -1,10 +1,3 @@
 ### PyCEC
 
-#### Required:
-
-- Testing
-	- Codecov
-- Documnentation
-- Requiremnets and setup.py
-- Tutorials
-- Run scripts
+A Python implementation of the Center of Excess Charge (CEC) collective variable.

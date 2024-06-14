@@ -143,7 +143,7 @@ class CECSystem:
         ha_types_sele = ' or '.join([f'name {ha}' for ha in self.heavy_atom_types_t])
         ha_sele_str = (
             f'({cv_resids_sele}) and ({ha_types_sele}) and protein'
-            f'and not backbone and not name H*'
+            f' and not backbone and not name H*'
             )  # exclude backbone and protons
         ha_sele = self.universe.select_atoms(ha_sele_str)  # ha atomgroup
 
@@ -376,7 +376,8 @@ if __name__ == "__main__":
     frame_test = 91
 
     # Directory and title
-    dir1 = '/biggin/b222/catz0163/pept/dynamics/pept_holo/pept_AF_H87P_D342P_v2'
+    #dir1 = '/biggin/b222/catz0163/pept/dynamics/pept_holo/pept_AF_H87P_D342P_v2'
+    dir1 = './simulations/pept_AF_H87P_D342P'
     title1 = 'PepT2 with AF H87P D342P'
 
     # Load the universe

@@ -376,7 +376,7 @@ if __name__ == "__main__":
     frame_test = 91
 
     # Directory and title
-    #dir1 = '/biggin/b222/catz0163/pept/dynamics/pept_holo/pept_AF_H87P_D342P_v2'
+    # dir1 = '/biggin/b222/catz0163/pept/dynamics/pept_holo/pept_AF_H87P_D342P_v2'
     dir1 = './simulations/pept_AF_H87P_D342P'
     title1 = 'PepT2 with AF H87P D342P'
 

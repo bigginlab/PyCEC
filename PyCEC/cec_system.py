@@ -7,7 +7,11 @@ can also be used to write the selection to a PDB file, generate a GROMACS\
 compatible index file, and get information about the selection.
 """
 # LOCAL
-from PyCEC import utils
+if __name__ == "__main__":
+    import utils
+else:
+    from PyCEC import utils
+
 
 # CORE
 import os

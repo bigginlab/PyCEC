@@ -196,10 +196,11 @@ if __name__ == "__main__":
 
     # Directory and title
     dir1 = '/biggin/b222/catz0163/pept/dynamics/pept_holo/pept_AF_H87P_D342P_v2/qmmm'
+    dir1 = '/Users/nfo24278/Documents/dphil/proton_transfer/PyCEC/simulations/pept_AF_H87P_D342P'
     title1 = 'PepT2 with AF H87P D342P'
 
     # Load the universe
-    u1 = mda.Universe(f'{dir1}/prod-s100.pdb', f'{dir1}/prod-s100.xtc')
+    u1 = mda.Universe(f'{dir1}/prod-s200.pdb', f'{dir1}/prod-s200.xtc')
 
     # # Initialise class
     # cv = CVAnalysis(u1, initial_resid=342, target_resid=56,

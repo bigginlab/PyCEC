@@ -37,7 +37,7 @@ class CVPlotting:
         plt.show()
 
     def plot_water_counts_line(self, save=False,
-                               filename='water_counts_line_hist',
+                               filename='water_counts_line_hist.png',
                                test=False, show=False):
         """
         Plot the water counts over time, with a histogram of frequency to the\
@@ -75,7 +75,7 @@ class CVPlotting:
 
         # Save the plot
         if save:
-            fig.savefig("water_counts2.png", dpi=300)
+            fig.savefig(filename, dpi=300)
 
         # Show the plot
         if show:
@@ -118,7 +118,8 @@ class CVPlotting:
 
 if __name__ == "__main__":
     # Directory and title
-    dir1 = '/biggin/b222/catz0163/pept/dynamics/pept_holo/pept_AF_H87P_D342P_v2'
+    # dir1 = '/biggin/b222/catz0163/pept/dynamics/pept_holo/pept_AF_H87P_D342P_v2'
+    dir1 = '/Users/nfo24278/Documents/dphil/proton_transfer/PyCEC/simulations/pept_AF_H87P_D342P'
     title1 = 'PepT2 with AF H87P D342P'
 
     # Load the universe

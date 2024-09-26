@@ -8,6 +8,7 @@ from MDAnalysis.analysis.hydrogenbonds.hbond_analysis import HydrogenBondAnalysi
 from tqdm import tqdm
 
 from matplotlib import pyplot as plt
+import seaborn as sns
 import numpy as np
 
 
@@ -23,6 +24,7 @@ class CVAnalysis:
         self.initial_resid = initial_resid
         self.target_resid = target_resid
         self.other_resids = other_resids
+        self.all_resids = initial_resid + target_resid + other_resids
         self.ligand = ligand
         self.cyzone_dim = cyzone_dim
         self.frame_n = frame_n
@@ -89,6 +91,7 @@ class WaterAnalysis:
         self.initial_resid = initial_resid
         self.target_resid = target_resid
         self.other_resids = other_resids
+        self.all_resids = [initial_resid] + [target_resid] + other_resids
         self.ligand = ligand
         self.cyzone_dim = cyzone_dim
         self.frame_n = frame_n  # TODO: is frame relevant here?
@@ -125,6 +128,9 @@ class WaterAnalysis:
 
         """
         # Create the HBA object
+        # hba = HBA(universe=self.u, donors_sel=donors_sel,
+        #           hydrogens_sel=hydrogens_sel, acceptors_sel=acceptors_sel,
+        #           d_h_cutoff=distance_cutoff, d_h_a_angle_cutoff=angle_cutoff)
         hba = HBA(universe=self.u, donors_sel=donors_sel,
                   hydrogens_sel=hydrogens_sel, acceptors_sel=acceptors_sel,
                   d_h_cutoff=distance_cutoff, d_h_a_angle_cutoff=angle_cutoff)
@@ -133,33 +139,251 @@ class WaterAnalysis:
         # Get counts
         counts = hba.count_by_time()
 
-    def get_water_h_bonds(self, distance_cutoff=3.5, angle_cutoff=120.0):
+        return counts
+
+
+    def get_water_h_bonds(self, distance_cutoff=3.5, angle_cutoff=120.0, waters_only=True):
         """
         Get the hydrogen bonds between the water molecules.
 
         """
         # Get the hydrogen bonds
-        counts = self.get_hydrogen_bonds(donors_sel=self.waters_sele_str,
-                                         hydrogens_sel=self.waters_sele_str,
-                                         acceptors_sel=self.waters_sele_str,
-                                         distance_cutoff=distance_cutoff,
-                                         angle_cutoff=angle_cutoff)
+        if waters_only:
+            counts = self.get_hydrogen_bonds(donors_sel=self.cv.waters_sele_str,
+                                             hydrogens_sel=self.cv.waters_sele_str,
+                                             acceptors_sel=self.cv.waters_sele_str,
+                                             distance_cutoff=distance_cutoff,
+                                             angle_cutoff=angle_cutoff)
+        else:
+            counts = self.get_hydrogen_bonds(donors_sel=self.cv.qm_all_sele_br_str,
+                                             hydrogens_sel=self.cv.qm_all_sele_br_str,
+                                             acceptors_sel=self.cv.qm_all_sele_br_str,
+                                             distance_cutoff=distance_cutoff,
+                                             angle_cutoff=angle_cutoff)
+
+        print(len(counts))
         return counts
 
-    def plot_hbond_counts(self, counts, save=False):
+    def plot_hbond_counts(self, counts, save=False, filename=None, title=None):
         """
         Plot the hydrogen bond counts.
-
         """
         fig, ax = plt.subplots()
-        ax.plot(self.times, counts)
+        ax.plot(self.times, counts, color='black', lw=1)
         ax.set_ylabel("Number of hydrogen bonds")
         ax.set_xlabel("Frame number")
-        ax.set_title("Hydrogen bond counts over time")
+        if title:
+            ax.set_title(title)
+        else:
+            ax.set_title("Hydrogen bond counts over time")
+        ax.ticklabel_format(style='plain')
 
         if save:
-            fig.savefig("hbond_counts.png", dpi=300)
+            if filename:
+                fig.savefig(filename, dpi=300)
+            else:
+                fig.savefig('hbond_counts.png', dpi=300)
 
+        plt.show()
+
+    def plot_multiple_hbond_counts_grid(
+            self,
+            parameter='cyzone_dim',
+            ncols=2,
+            values=[[9, 8, -8], [9, 8, -8]],
+            save=False,
+            filename=None,
+            title=None,
+            distance_cutoff=3.5,
+            angle_cutoff=120.0,
+            waters_only=True
+            ):
+        """
+        Plot multiple hydrogen bond counts in a grid.
+        """
+
+        import math
+        num_plots = len(values)
+        nrows = math.ceil(num_plots / ncols)  # Calculate the required number of rows
+        
+        # Create subplots with nrows and ncols
+        fig, axes = plt.subplots(
+            nrows=nrows,
+            ncols=ncols,
+            figsize=(6 * ncols, 4 * nrows),
+            sharey=True
+            )
+        
+        # Flatten axes if it's a 2D array for easier indexing
+        axes = axes.flatten()
+        
+        for i, value in enumerate(values):
+            if parameter == 'cyzone_dim':
+                print(f"Setting cyzone_dim to {value}")
+                self.cv.set_cyzone_dim(value)
+                print(f"{len(self.cv.waters.atoms)} waters selected.")
+                print(f"{len(self.cv.qm_all.atoms)} atoms selected.\n")
+                counts = self.get_water_h_bonds(
+                    distance_cutoff=distance_cutoff,
+                    angle_cutoff=angle_cutoff,
+                    waters_only=waters_only
+                    )
+                _, _ = self.get_max_hbond_counts(counts)
+                
+            else:
+                pass
+            ax = axes[i]
+            ax.plot(self.times, counts, color='black', lw=1)
+            ax.set_ylabel("Number of hydrogen bonds")
+            ax.set_xlabel("Frame number")
+            
+            if waters_only:
+                ax.set_title(f"Water H-bond counts: {parameter} = {value}, {len(self.cv.waters.atoms)} waters")
+            else:
+                ax.set_title(f"H-bond counts: {parameter} = {value}, {len(self.cv.qm_all.atoms)} atoms")
+            ax.ticklabel_format(style='plain')
+        
+        # Hide any unused subplots (if num_plots < nrows * ncols)
+        for j in range(num_plots, len(axes)):
+            axes[j].set_visible(False)
+        
+        # Adjust layout
+        plt.tight_layout()
+        
+        # Save the figure if needed
+        if save:
+            if filename:
+                fig.savefig(filename, dpi=300)
+            else:
+                fig.savefig('multiple_hbond_counts_grid.png', dpi=300)
+
+        plt.show()
+
+    def plot_multiple_hbond_counts_overlay(
+            self,
+            parameter='cyzone_dim',
+            values=[[9, 8, -8], [9, 8, -8]],
+            save=False,
+            filename=None,
+            title=None,
+            distance_cutoff=3.5,
+            angle_cutoff=120.0,
+            waters_only=True
+            ):
+        """
+        Plot and overlay multiple hydrogen bond counts.
+        """        
+        # Create subplots with nrows and ncols
+        fig, ax = plt.subplots()
+        all_counts = []
+        for i, value in enumerate(values):
+            if parameter == 'cyzone_dim':
+                print(f"Setting cyzone_dim to {value}")
+                self.cv.set_cyzone_dim(value)
+                print(f"{len(self.cv.waters.atoms)} waters selected.")
+                print(f"{len(self.cv.qm_all.atoms)} atoms selected.\n")
+                counts = self.get_water_h_bonds(
+                    distance_cutoff=distance_cutoff,
+                    angle_cutoff=angle_cutoff,
+                    waters_only=waters_only
+                    )
+                _, _ = self.get_max_hbond_counts(counts)
+                all_counts.append(counts)
+                
+            else:
+                pass
+            if waters_only:
+                ax.plot(self.times, counts, lw=1, label=f"{parameter} = {value}, {len(self.cv.waters.atoms)} waters")
+            else:
+                ax.plot(self.times, counts, lw=1, label=f"{parameter} = {value}, {len(self.cv.qm_all.atoms)} atoms")
+
+        ax.legend(frameon=False)
+        ax.set_ylabel("Number of hydrogen bonds")
+        ax.set_xlabel("Time [ns]")
+        
+        if waters_only:
+            ax.set_title(f"Water H-bond counts: Variable {parameter}")
+        else:
+            ax.set_title(f"H-bond counts: Variable {parameter}")
+        ax.ticklabel_format(style='plain')
+        
+        
+        # Adjust layout
+        plt.tight_layout()
+        
+        # Save the figure if needed
+        if save:
+            if filename:
+                fig.savefig(filename, dpi=300)
+            else:
+                fig.savefig('multiple_hbond_counts_grid.png', dpi=300)
+
+        plt.show()
+
+        return np.array(all_counts)
+    
+    def plot_standard_deviation(self, counts):
+        """
+        Plot the standard deviation of the hydrogen bond counts.
+        """
+        fig, ax = plt.subplots()
+        ax.plot(self.times, np.std(counts, axis=0), color='black', lw=1)
+        ax.set_ylabel("Standard deviation of hydrogen bond counts")
+        ax.set_xlabel("Frame number")
+        ax.set_title("Standard deviation of hydrogen bond counts over time")
+        ax.ticklabel_format(style='plain')
+        plt.tight_layout()
+        plt.show()
+
+    def plot_autocorrelation(self, counts):
+        """
+        Plot the autocorrelation of the hydrogen bond counts.
+        """
+        from statsmodels.graphics.tsaplots import plot_acf
+        fig, ax = plt.subplots()
+        plot_acf(counts, ax=ax, lags=10, zero=False, bartlett_confint=False)
+        ax.set_title("Autocorrelation of hydrogen bond counts")
+        plt.tight_layout()
+        plt.show()
+
+    def water_bridge_analysis(self):
+        """
+        Analyse the water bridges between the water molecules.
+        MDAnalysis.analysis.hydrogenbonds.WaterBridgeAnalysis()
+        Very slow and not super useful.
+        """
+        pass
+
+    def hydrogen_bond_lifetimes(self):
+        """
+        Get the hydrogen bond lifetimes.
+        """
+        palette = sns.color_palette("flare", n_colors=len(self.all_resids))
+        fig, ax = plt.subplots()
+        for i, resid in enumerate(self.all_resids):
+
+            hba = HBA(
+                universe=self.u,
+                donors_sel=self.cv.waters_sele_str + ' or ' + f'resid {resid}',
+                hydrogens_sel=self.cv.waters_sele_str + ' or ' + f'resid {resid}',
+                acceptors_sel=self.cv.waters_sele_str + ' or ' + f'resid {resid}'
+                )
+            hba.run()  # run the analysis
+
+            # Get counts
+            # counts = hba.count_by_time()
+            tau_timeseries, timeseries = hba.lifetime(intermittency=5)
+            print(f"\nHydrogen bond tau: {tau_timeseries}")
+            print(f"Timeseries: {timeseries}")
+
+            ax.plot(tau_timeseries, timeseries, color=palette[i], lw=1, label=f"Resid {resid}")
+
+        ax.set_ylabel("Autocorrelation")
+        ax.set_xlabel("Tau")
+        ax.set_title("Hydrogen bond lifetimes")
+        ax.ticklabel_format(style='plain')
+        ax.legend(frameon=False)
+        plt.tight_layout()
         plt.show()
 
     def get_max_hbond_counts(self, counts):
@@ -216,6 +440,12 @@ if __name__ == "__main__":
                        ligand=[1, 2], cyzone_dim=[8, 8, -8],
                        frame_n=160)
 
-    counts = wa.get_water_h_bonds()
+    # counts = wa.get_water_h_bonds()
+    # wa.plot_autocorrelation(counts)
 
-    wa.plot_hbond_counts(counts, save=True)
+    # # wa.plot_hbond_counts(counts, save=True)
+    # # wa.plot_multiple_hbond_counts_grid(parameter='cyzone_dim', values=[[7, 8, -8], [10, 8, -8]], save=False, waters_only=False)
+    # all_counts = wa.plot_multiple_hbond_counts_overlay(parameter='cyzone_dim', values=[[7, 8, -8], [8, 8, -8], [9, 8, -8], [10, 8, -8]], save=False, waters_only=False)
+    # wa.plot_standard_deviation(all_counts)
+
+    wa.hydrogen_bond_lifetimes()

@@ -100,8 +100,8 @@ class CECSystem:
         self.protein = self.universe.select_atoms('protein')  # protein
 
         # QM atoms
-        self.qm_all, self.qm_heavy, self.qm_light, self.waters, \
-            self.waters_sele_str = self.select_QM_atoms()
+        self.qm_all, self.qm_heavy, self.qm_light, self.qm_all_sele_str, \
+            self.qm_all_sele_br_str, self.waters, self.waters_sele_str = self.select_QM_atoms()
 
     def generate_cv_selection(self):
         """
@@ -186,9 +186,12 @@ class CECSystem:
         qm_heavy = ha_sele + ha_water_sele
         qm_light = la_sele + la_water_sele
         qm_all = ha_sele + ha_water_sele + la_sele + la_water_sele
+        qm_all_sele_str = f'({ha_sele_str}) or ({ha_wat_sele_str}) or ({la_sele_str}) or ({la_wat_sele_str})'
+        qm_all_sele_br_str = f'byres (({ha_sele_str}) or ({ha_wat_sele_str}) or ({la_sele_str}) or ({la_wat_sele_str}))'
+
 
         # Return the selections
-        return qm_all, qm_heavy, qm_light, waters, waters_sele_str
+        return qm_all, qm_heavy, qm_light, qm_all_sele_str, qm_all_sele_br_str, waters, waters_sele_str
 
     def set_frame(self, frame_n=None):
         """
@@ -208,6 +211,20 @@ class CECSystem:
             self.frame_n = frame_n  # update the frame instance attribute
             # Update qm selections  waters) every time the frame is updated
             self.qm_all, self.qm_heavy, self.qm_light, self.waters = self.select_QM_atoms()
+
+    def set_cyzone_dim(self, cyzone_dim):
+        """
+        Function to set the cyzone dimensions.
+
+        Parameters
+        ----------
+        cyzone_dim : list of int
+            Dimensions of the cyzone around the protein.
+        """
+        self.cyzone_dim = cyzone_dim
+        # QM atoms
+        self.qm_all, self.qm_heavy, self.qm_light, self.qm_all_sele_str, \
+            self.qm_all_sele_br_str, self.waters, self.waters_sele_str = self.select_QM_atoms()
 
     def create_dir(self, dir_name):
         """
